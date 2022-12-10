@@ -5,7 +5,8 @@ from typing import Any, TYPE_CHECKING
 from checkov.common.graph.db_connectors.db_connector import DBConnector
 from checkov.common.graph.graph_manager import GraphManager
 from checkov.kubernetes.graph_builder.local_graph import KubernetesLocalGraph
-from checkov.kubernetes.kubernetes_utils import get_folder_definitions, K8sGraphFlags
+from checkov.kubernetes.kubernetes_utils import get_folder_definitions
+from checkov.kubernetes.kubernetes_graph_flags import K8sGraphFlags
 
 if TYPE_CHECKING:
     from networkx import DiGraph
@@ -18,7 +19,7 @@ class KubernetesGraphManager(GraphManager[KubernetesLocalGraph, "dict[str, list[
     def build_graph_from_source_directory(
         self,
         source_dir: str,
-        local_graph_classType: type[KubernetesLocalGraph] = KubernetesLocalGraph,
+        local_graph_class: type[KubernetesLocalGraph] = KubernetesLocalGraph,
         render_variables: bool = True,
         parsing_errors: dict[str, Exception] | None = None,
         download_external_modules: bool = False,

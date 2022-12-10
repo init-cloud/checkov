@@ -127,6 +127,8 @@ definition:
 | Not Equals Ignore Case       | `not_equals_ignore_case`       |
 | Range Includes               | `range_includes`               |
 | Range Not Includes           | `range_not_includes`           |
+| Number of words Equals       | `number_of_words_equals`       |
+| Number of words not Equals   | `number_of_words_not_equals`   |
 
 All those operators are supporting JSONPath attribute expression by adding the `jsonpath_` prefix to the operator, for example - `jsonpath_length_equals`
 
@@ -311,4 +313,68 @@ definition:
 ```
 
 [See all examples of Custom Policies in code](https://www.checkov.io/3.Custom%20Policies/Examples.html)
+
+## Supported Frameworks
+
+### Bicep
+All resources can be referenced under `resource_types`.
+Any kind of connection between resources is supported
+
+### CloudFormation
+All resources can be referenced under `resource_types`.
+Any kind of connection between resources is supported
+
+### Dockerfile
+All official Docker instructions can be referenced under `resource_types`.
+Currently, no support for connections.
+
+#### Note
+Following attribute values are supported
+
+- `content` stores the raw data for an instruction
+- `value` stores the sanitized data for an instruction
+
+ex.
+```dockerfile
+RUN apt-get update \
+ && sudo apt-get install vim
+```
+->
+```yaml
+content: "RUN apt-get update \\\n && sudo apt-get install vim\n"
+value: "apt-get update  && sudo apt-get install vim"
+```
+
+### GitHub Actions
+Following `resource_types` are supported
+
+- `permissions` on the root level
+- `steps`
+- `jobs`
+
+Following connections are supported
+
+- `steps` -> `jobs`
+
+#### Note
+The value for `permissions` can be either a map or a single string.
+Map entries can be referenced via their respective key, but a single string entry can be accessed by using `permissions` as the attribute.
+
+ex.
+```yaml
+cond_type: "attribute"
+resource_types:
+  - "permissions"
+attribute: "permissions"
+operator: "not_equals"
+value: "write-all"
+```
+
+### Kubernetes
+All resources can be referenced under `resource_types`.
+Currently, no support for connections.
+
+### Terraform
+All resources can be referenced under `resource_types`.
+Any kind of connection between resources is supported
 
